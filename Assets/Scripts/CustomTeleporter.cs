@@ -17,12 +17,16 @@ public class CustomTeleporter : VRTK_BasicTeleport
         {
             Vector3 targetUp = e.raycastHit.normal;
 
+            Quaternion playerRotationDelta;
             if (Vector3.Angle(currentUp, targetUp) == 180)
             {
                 Debug.Log("OWEN: Special case for 180");
+                playerRotationDelta = Quaternion.FromToRotation(cameraEye.transform.forward, targetUp) * Quaternion.FromToRotation(currentUp, cameraEye.transform.forward);
+            } else
+            {
+                playerRotationDelta = Quaternion.FromToRotation(currentUp, targetUp);
             }
 
-            Quaternion playerRotationDelta = Quaternion.FromToRotation(currentUp, targetUp);
             cameraRig.transform.rotation = playerRotationDelta * cameraRig.transform.rotation;
             currentUp = targetUp;
         }
